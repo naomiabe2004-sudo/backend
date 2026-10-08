@@ -131,6 +131,8 @@ router.get("/me", async (req, res) => {
     );
 
     const user = await User.findById(decoded.id).select("-password");
+    
+    console.log("USER FROM MONGODB:", user);
 
     if (!user) {
       return res.status(404).json({
@@ -228,5 +230,5 @@ router.put("/me", async (req, res) => {
     });
   }
 });
-
+ 
 module.exports = router;
