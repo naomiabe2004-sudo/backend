@@ -248,13 +248,17 @@ router.put("/:id/status", protect, authorize("seller"), async (req, res) => {
   try {
     const { status } = req.body;
 
-    const allowedStatuses = [
-      "To Pay",
-      "To Ship",
-      "To Receive",
-      "Completed",
-      "Cancelled",
-    ];
+   const allowedStatuses = [
+  "To Pay",
+  "To Ship",
+  "Seller Preparing",
+  "Shipped",
+  "Out for Delivery",
+  "Delivered",
+  "To Receive",
+  "Completed",
+  "Cancelled",
+];
 
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
