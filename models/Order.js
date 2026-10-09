@@ -91,13 +91,17 @@ const orderSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "To Pay",
-        "To Ship",
-        "To Receive",
-        "Completed",
-        "Cancelled",
-      ],
+   enum: [
+  "To Pay",
+  "Seller Preparing",
+  "To Ship",
+  "Shipped",
+  "Out for Delivery",
+  "Delivered",
+  "To Receive",
+  "Completed",
+  "Cancelled",
+],
       default: "To Pay",
     },
   },
