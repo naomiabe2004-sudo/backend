@@ -92,8 +92,8 @@ router.post("/", protect, authorize("buyer"), async (req, res) => {
       deliveryFee: 0,
       total: subtotal,
       status: paymentMethod?.toLowerCase() === "cod"
-    ? "To Ship"
-    : "To Pay",
+  ? "Seller Preparing"
+  : "To Pay",
     });
 
     await logAction(
@@ -248,10 +248,10 @@ router.put("/:id/status", protect, authorize("seller"), async (req, res) => {
   try {
     const { status } = req.body;
 
-   const allowedStatuses = [
+  const allowedStatuses = [
   "To Pay",
-  "To Ship",
   "Seller Preparing",
+  "To Ship",
   "Shipped",
   "Out for Delivery",
   "Delivered",
