@@ -53,7 +53,7 @@ router.post("/", protect, authorize("buyer"), async (req, res) => {
           $inc: { stock: -qty },
         },
         {
-          new: true,
+          returnDocument: 'after',
         }
       );
 
