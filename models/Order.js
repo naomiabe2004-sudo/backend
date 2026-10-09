@@ -37,15 +37,58 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
+    customerName: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    customerPhone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    deliveryAddress: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    paymentMethod: {
+      type: String,
+      default: "COD",
+    },
+
+    paymentStatus: {
+      type: String,
+      default: "Pending",
+    },
+
     items: {
       type: [orderItemSchema],
       required: true,
     },
+
+    subtotal: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+
+    deliveryFee: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+
     total: {
       type: Number,
       required: true,
       min: 0,
     },
+
     status: {
       type: String,
       enum: [

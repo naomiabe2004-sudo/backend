@@ -91,7 +91,9 @@ router.post("/", protect, authorize("buyer"), async (req, res) => {
       subtotal,
       deliveryFee: 0,
       total: subtotal,
-      status: "To Pay",
+      status: paymentMethod?.toLowerCase() === "cod"
+    ? "To Ship"
+    : "To Pay",
     });
 
     await logAction(
