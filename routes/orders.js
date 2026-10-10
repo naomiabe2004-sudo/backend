@@ -81,20 +81,18 @@ router.post("/", protect, authorize("buyer"), async (req, res) => {
     }
 
     const order = await Order.create({
-      buyer: req.user.id,
-      customerName: customerName || "",
-      customerPhone: customerPhone || "",
-      deliveryAddress: deliveryAddress.trim(),
-      paymentMethod: paymentMethod || "COD",
-      paymentStatus: "Pending",
-      items: orderItems,
-      subtotal,
-      deliveryFee: 0,
-      total: subtotal,
-      status: paymentMethod?.toLowerCase() === "cod"
-  ? "Seller Preparing"
-  : "To Pay",
-    });
+  buyer: req.user.id,
+  customerName: customerName || "",
+  customerPhone: customerPhone || "",
+  deliveryAddress: deliveryAddress.trim(),
+  paymentMethod: paymentMethod || "COD",
+  paymentStatus: "Pending",
+  items: orderItems,
+  subtotal,
+  deliveryFee: 0,
+  total: subtotal,
+  status: "To Pay",
+});
 
     await logAction(
       req,
@@ -246,7 +244,13 @@ router.get("/sales", protect, authorize("seller"), async (req, res) => {
 // Seller updates order status
 router.put("/:id/status", protect, authorize("seller"), async (req, res) => {
   try {
-    const { status } = req.body;
+    let { status } = req.body;
+
+// When seller marks an order as Completed,
+// show Order Received to the buyer.
+if (status === "Completed") {
+  status = "Order Received";
+}
 
   const allowedStatuses = [
   "To Pay",
@@ -318,7 +322,11 @@ router.put("/:id/status", protect, authorize("seller"), async (req, res) => {
 });
 
 // Buyer cancels their own order
-router.put("/:id/cancel", protect, authorize("buyer"), async (req, res) => {
+if (order.status !== "To Pay") {
+  return res.status(400).json({
+    message: "Only orders with To Pay status can be cancelled.",
+  });
+}
   try {
     const order = await Order.findOne({
       _id: req.params.id,
@@ -372,5 +380,6 @@ router.put("/:id/cancel", protect, authorize("buyer"), async (req, res) => {
     });
   }
 });
+
 
 module.exports = router;
